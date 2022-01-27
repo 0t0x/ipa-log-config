@@ -3,15 +3,20 @@
 A tool for log forwarding configuration on IPA servers and clients. Configures rsyslog to collect and forward selected log files to desired remote server. For more information about this effort and some inspiration what can be done with those logs, visit [this page](https://www.freeipa.org/page/Centralized_Logging).
 
 ## Usage
-
+For FreeIPA container install rsyslog
 ```
-# ./ipa_log_config.py --target <domain name or ip of target server>
+# dnf install rsyslog
+```
+
+Then run the script
+```
+# python3 ipa_log_config.py --target <domain name or ip of target server>
 ```
 
 To revert changes done by this script, use the `--revert` option:
 
 ```
-# ./ipa_log_config.py --revert
+# python3 ipa_log_config.py --revert
 ```
 
 ## Supported platforms
@@ -20,7 +25,7 @@ Currently, only RHEL 7 / CentOS 7 and derivates are supported.
 
 ## Requirements
 
-The script requires `python2-sssdconfig` package.
+The script requires `python3-sssdconfig` package.
 
 ## Detailed description
 
@@ -29,7 +34,6 @@ This tool tries to be as not invasive as possible. The rsyslog configuration is 
 ### Forwarded logs
 
 ```
-/var/log/audit/audit.log
 /var/log/secure
 /var/log/httpd/access_log
 /var/log/httpd/error_log
