@@ -107,33 +107,33 @@ class SSSD(object):
         self._restart()
 
 
-class Auditd(object):
-    """Auditd"""
-
-    _AUDITD_SYSLOG_CONF = '/etc/audisp/plugins.d/syslog.conf'
-
-    def _restart(self):
-        # why not systemctl?
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1026648
-        print('Restarting auditd')
-        if call(['service', 'auditd', 'restart']) != 0:
-            raise ExternalCommandError('Failed to restart auditd')
-
-    def log_to_syslog(self):
-        print('Enabling audisp syslog plugin')
-        if call(['sed', '-i', 's/active = no/active = yes/',
-                self._AUDITD_SYSLOG_CONF]) != 0:
-            raise ExternalCommandError(
-                'Failed to run sed on file: ' + self._AUDITD_SYSLOG_CONF)
-        self._restart()
-
-    def revert(self):
-        print('Disabling audisp syslog plugin')
-        if call(['sed', '-i', 's/active = yes/active = no/',
-                self._AUDITD_SYSLOG_CONF]) != 0:
-            raise ExternalCommandError(
-                'Failed to run sed on file: ' + self._AUDITD_SYSLOG_CONF)
-        self._restart()
+#class Auditd(object):
+#    """Auditd"""
+#
+#    _AUDITD_SYSLOG_CONF = '/etc/audisp/plugins.d/syslog.conf'
+#
+#    def _restart(self):
+#        # why not systemctl?
+#        # https://bugzilla.redhat.com/show_bug.cgi?id=1026648
+#        print('Restarting auditd')
+#        if call(['service', 'auditd', 'restart']) != 0:
+#            raise ExternalCommandError('Failed to restart auditd')
+#
+#    def log_to_syslog(self):
+#        print('Enabling audisp syslog plugin')
+#        if call(['sed', '-i', 's/active = no/active = yes/',
+#                self._AUDITD_SYSLOG_CONF]) != 0:
+#            raise ExternalCommandError(
+#                'Failed to run sed on file: ' + self._AUDITD_SYSLOG_CONF)
+#        self._restart()
+#
+#    def revert(self):
+#        print('Disabling audisp syslog plugin')
+#        if call(['sed', '-i', 's/active = yes/active = no/',
+#                self._AUDITD_SYSLOG_CONF]) != 0:
+#            raise ExternalCommandError(
+#                'Failed to run sed on file: ' + self._AUDITD_SYSLOG_CONF)
+#        self._restart()
 
 
 class RequirementError(Exception):
@@ -405,13 +405,15 @@ def main():
         Requirements().check_all()
         if args.target:
             SSSD().enable_debug()
-            Auditd().log_to_syslog()
+            #edit
+            #Auditd().log_to_syslog()
             Rsyslog().write_config(args.target, args.target_port)
             print('Configuration completed successfully, IPA logs are ' \
                 'forwarded to ' + args.target + ':' + str(args.target_port))
         elif args.revert:
             SSSD().enable_debug(1, False)
-            Auditd().revert()
+            #edit
+            #Auditd().revert()
             Rsyslog().revert()
             print('Configuration successfully reverted to the default state')
     except RequirementError as e:
